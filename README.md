@@ -1,7 +1,7 @@
 # website-generator
 
 ## About:
-Right now this python script is set up to generate my website. It can take markdown files, html files, and json files, using both markdown and json for metadata. 
+Right now this python script is set up to generate my website. It takes a markdown file and converts it to html using a template and metadata from either the markdown itself or an external json file. It also copies over any other files, meaning you can add plain HTML or assets. It then uses templates for an index page and templates for previews to generate an index page. It does the same thing as the index page for rss using different templates.
 
 ### Dependencies
 
