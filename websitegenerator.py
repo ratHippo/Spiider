@@ -1,7 +1,6 @@
 import json, markdown, os
 from shutil import copyfile, copytree
 import config
-print(dir(config))
 def get_article_list(folder):
     articles = []
     for article in os.listdir(folder["srcdir"]):
@@ -10,6 +9,7 @@ def get_article_list(folder):
     return articles
 def get_metadata(folder, article):
     #markdown
+    
     if os.path.exists(folder["srcdir"]+article+"/article.md"):
         md = markdown.Markdown(extensions=['full_yaml_metadata'])
         md.convert(open(folder["srcdir"]+article+"/article.md","r").read())
