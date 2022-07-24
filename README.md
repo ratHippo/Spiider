@@ -19,8 +19,32 @@ The sample configuration file "config.py" defines a sample config. You can get t
 | rsstemplate | RSS template, use {items to put in the rss items}|
 | rssitemtemplate | use {title}, {path}, and {description} to get the title, path and description |
 
+## Writing
+To write an article, first make a folder with the name of the article in the source directory. Then create a markdown file named "article.md" in that folder. Any files placed in the folder with the "article.md" file, excluding the name "metadata.json" will be copied into the build. This means you can place any assets you want here. To create metadata for your article you have two options:
+* Markdown metadata (recommended, uses yaml format)
+* json metadata (Create a seperate file called metadata.json)
+
+For markdown metadata use the article.md file. the metadata should be at the top of your article and look like this:
+```
+---
+title:{insert title}
+description: {insert description}
+date: {insert date}
+path: {insert path}
+testing: {insert testing (bool)}
+---
+```
+See the table below for what each point of data means
+| Property | Details |
+|-|-|
+| title | The title of the article |
+| description | A short description of the article |
+| date | The date the article was written |
+| path | The name of the folder that you created for the article
+| testing | True or false: if false the article will be ignored by the builder|
+
 ## Dependencies
 
 ```bash
-pip install json markdown markdown-full-yaml-metadata
+pip3 install json markdown markdown-full-yaml-metadata
 ```
