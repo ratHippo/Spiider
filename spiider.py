@@ -1,6 +1,6 @@
-import json, markdown, os
+import json, os, markdown, config, sys
 from shutil import copyfile, copytree
-import config
+
 def get_article_list(folder):
     articles = []
     for article in os.listdir(folder["srcdir"]):
@@ -21,7 +21,7 @@ def get_metadata(folder, article):
     #none
     else:
         return None
-#generate articles
+#Generate articles
 def generate_article(article, markdownpath, folder):
     #Generates HTML given json for metadata, md for text, and template"
     data = get_metadata(folder, article)
