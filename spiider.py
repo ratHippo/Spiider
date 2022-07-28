@@ -110,5 +110,16 @@ def build(folder):
         index = open(folder["indexdir"] + "index.rss", "w")
         index.write(generate_rss_page(articles, folder))
         index.close()
-for folder in config.folders:
-    build(folder)
+def cli(args):
+    if args[0] == "build":
+        if len(args) == 1:
+            for folder in config.folders:
+                build(folder)
+        elif len(args) == 2:
+            build(args[1])
+        elif len(args) == 3:
+            write_articles([args[2]], args[1])
+    else:
+         print("No such thing as argument \'"+args[0]+"\'.")
+    
+cli(sys.argv[1:])

@@ -51,4 +51,4 @@ folder["rssitemtemplate"] = """
     <description>{description}</description>
 </item>
 """
-folders = [folder]
+folders = {"folder":folder}
