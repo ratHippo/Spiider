@@ -119,6 +119,14 @@ def cli(args):
             build(args[1])
         elif len(args) == 3:
             write_articles([args[2]], args[1])
+    if args[0] == "new":
+        folder = config.folders[args[1]]
+        name = args[2]
+        print(folder, name)
+        if not os.path.exists(folder["srcdir"] + name): os.mkdir(folder["srcdir"] + name)
+        file = open(folder["srcdir"] + f"{name}/article.md", "w")
+        file.write("""---\ntitle: Sample\ndescription: This is a Sample Article\ndate: 7-23-22\npath: sample\ntesting: false\n---""")
+        file.close()
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
     
