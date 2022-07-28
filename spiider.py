@@ -119,13 +119,6 @@ def cli(args):
             build(args[1])
         elif len(args) == 3:
             write_articles([args[2]], args[1])
-    #     pass
-    # case "remove":
-    #     pass
-    # case "rename":
-    #     pass
-    # case "path":
-    #     pass
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
     
