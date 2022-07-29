@@ -1,5 +1,5 @@
 import json, os, markdown, config, sys
-from shutil import copyfile, copytree
+from shutil import copyfile, copytree, rmtree
 
 def get_article_list(folder):
     articles = []
@@ -122,11 +122,15 @@ def cli(args):
     if args[0] == "new":
         folder = config.folders[args[1]]
         name = args[2]
-        print(folder, name)
         if not os.path.exists(folder["srcdir"] + name): os.mkdir(folder["srcdir"] + name)
         file = open(folder["srcdir"] + f"{name}/article.md", "w")
         file.write("""---\ntitle: Sample\ndescription: This is a Sample Article\ndate: 7-23-22\npath: sample\ntesting: false\n---""")
         file.close()
+    if args[0] == "remove":
+        input("This will remove the article and all files in the same folder. Exit the program if you want to prevent this.")
+        folder = config.folders[args[1]]
+        name = args[2]
+        if os.path.exists(folder["srcdir"] + name): rmtree(folder["srcdir"] + name)
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
     
