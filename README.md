@@ -41,8 +41,23 @@ See the table below for what each point of data means
 
 Edit this metadata in your article to change how it will be displayed.
 To add text to your article, simply write markdown in the resto of the file
+
+## Building
+
+To build everything, run:
+
+`python3 spiider.py build`
+
+To build a single folder run:
+
+`python3 spiider.py build foldername`
+
+To build a single article run:
+
+`python3 spiider.py build foldername articlename`
+(keep in mind that this won't update the index page)
 ## Dependencies
 
-```bash
+`
 pip3 install json markdown markdown-full-yaml-metadata
-```
+`
