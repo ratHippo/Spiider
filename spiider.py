@@ -114,11 +114,11 @@ def cli(args):
     if args[0] == "build":
         if len(args) == 1:
             for folder in config.folders:
-                build(folder)
+                build(config.folders[folder])
         elif len(args) == 2:
-            build(args[1])
+            build(config.folders[args[1]])
         elif len(args) == 3:
-            write_articles([args[2]], args[1])
+            write_articles([args[2]], config.folders[args[1]])
     if args[0] == "new":
         folder = config.folders[args[1]]
         name = args[2]
