@@ -20,11 +20,7 @@ The sample configuration file "config.py" defines a sample config. You can get t
 | rssitemtemplate | use {title}, {path}, and {description} to get the title, path and description |
 
 ## Writing
-To write an article, first make a folder with the name of the article in the source directory. Then create a markdown file named "article.md" in that folder. Any files placed in the folder with the "article.md" file, excluding the name "metadata.json" will be copied into the build. This means you can place any assets you want here. To create metadata for your article you have two options:
-* Markdown metadata (recommended, uses yaml format)
-* json metadata (Create a seperate file called metadata.json)
-
-For markdown metadata use the article.md file. the metadata should be at the top of your article and look like this:
+To write an article, navigate to the directory which has spiider.py in it. Then run `python3 spiider.py new {foldername} {articlename}`. A directory with the article name you put should be located in your source directory. There should be a file in this folder called 'article.md' The file should contain metadata that looks like this:
 ```
 ---
 title:{insert title}
@@ -43,6 +39,8 @@ See the table below for what each point of data means
 | path | The name of the folder that you created for the article
 | testing | True or false: if false the article will be ignored by the builder|
 
+Edit this metadata in your article to change how it will be displayed.
+To add text to your article, simply write markdown in the resto of the file
 ## Dependencies
 
 ```bash
