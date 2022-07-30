@@ -1,5 +1,5 @@
 import json, os, markdown, config, sys
-from shutil import copyfile, copytree, rmtree
+from shutil import copyfile, copytree, rmtree, move
 
 def get_article_list(folder):
     articles = []
@@ -131,6 +131,11 @@ def cli(args):
         folder = config.folders[args[1]]
         name = args[2]
         if os.path.exists(folder["srcdir"] + name): rmtree(folder["srcdir"] + name)
+    elif args[0] == "rename":
+        folder = config.folders[args[1]]
+        name = args[2]
+        new_name = args[3]
+        move(folder["srcdir"] + name, folder["srcdir"] + new_name)
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
     
