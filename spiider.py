@@ -139,5 +139,6 @@ def cli(args):
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
 
-os.chdir(os.getcwd())    
-cli(sys.argv[1:])
+if __name__ == '__main__':
+    os.chdir(os.getcwd())  
+    cli(sys.argv[1:])
