@@ -138,5 +138,6 @@ def cli(args):
         move(folder["srcdir"] + name, folder["srcdir"] + new_name)
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
-    
+
+os.chdir(os.getcwd())    
 cli(sys.argv[1:])
