@@ -1,5 +1,4 @@
-import json, os, markdown, config, sys
-from shutil import copyfile, copytree, rmtree, move
+import json, os, markdown, config, sys, shutil
 
 def get_article_list(folder):
     articles = []
@@ -46,10 +45,10 @@ def write_articles(articles, folder):
             if not os.path.exists(folder["builddir"]+dir):
                 if file.endswith(".html"):
                     if not os.path.exists(folder["builddir"] + article): os.mkdir(folder["builddir"] + article)
-                    copyfile(folder["srcdir"]+dir, folder["builddir"]+dir)
+                    shutil.copyfile(folder["srcdir"]+dir, folder["builddir"]+dir)
 
                 if os.path.isdir(folder["srcdir"]+dir):
-                        copytree(folder["srcdir"]+dir, folder["builddir"]+dir)
+                        shutil.copytree(folder["srcdir"]+dir, folder["builddir"]+dir)
 #Generate index page
 def generate_preview(metadata, folder, returndate = False):
     #Generates preview given metadata and template
@@ -130,12 +129,13 @@ def cli(args):
         input("This will remove the article and all files in the same folder. Exit the program if you want to prevent this.")
         folder = config.folders[args[1]]
         name = args[2]
-        if os.path.exists(folder["srcdir"] + name): rmtree(folder["srcdir"] + name)
+        if os.path.exists(folder["srcdir"] + name): shutil.rmtree(folder["srcdir"] + name)
     elif args[0] == "rename":
         folder = config.folders[args[1]]
         name = args[2]
         new_name = args[3]
-        move(folder["srcdir"] + name, folder["srcdir"] + new_name)
+        shutil.move(folder["srcdir"] + name, folder["srcdir"] + new_name)
+        
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
 
