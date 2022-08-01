@@ -4,7 +4,7 @@
 Spiider is a python script for generating websites (Spiider makes webs). It takes a markdown file and converts it to html using a template and metadata from either the markdown itself or an external json file. It also copies over any other files, meaning you can add plain HTML or assets. It then uses templates for an index page and templates for previews to generate an index page. It does the same thing as the index page for rss using different templates.
 
 ## Configuration
-The sample configuration file "config.py" defines a sample config. You can get this config in any way you want, all that matters is that you have a dictionary of subconfigs named "folders" with the keys being the names of the folders you want to use in the CLI and the value being the folders.
+The sample configuration file "config.py" defines a sample config. You can get this config in any way you want, all that matters is that you have a dictionary of subconfigs named "folders" with the keys being the names of the folders you want to use in the CLI and the value being the folders themselves. Each subconfig is a "Folder" object which uses the following properties:
 
 |   Property  |   Details   |
 |-------------|-------------|

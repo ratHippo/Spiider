@@ -1,9 +1,10 @@
-folder = {}
-folder["srcdir"] = "src/articles/"
-folder["indexdir"] = "build/"
-folder["indexlinkdir"] = "articles/"
-folder["builddir"] = "build/articles/"
-folder["articletemplate"] = """
+from spiider import Folder
+folder = Folder()
+folder.srcdir = "src/articles/"
+folder.indexdir = "build/"
+folder.indexlinkdir = "articles/"
+folder.builddir = "build/articles/"
+folder.articletemplate = """
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
     <head>
@@ -16,7 +17,7 @@ folder["articletemplate"] = """
     </body>
  </html>
 """
-folder["indextemplate"] = """
+folder.indextemplate = """
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -28,15 +29,15 @@ folder["indextemplate"] = """
   </body>
 </html>
 """
-folder["previewtemplate"] = """
+folder.previewtemplate = """
 <div>
     <a href = {indexlinkdir}{path}><h3>{title}</h3></a>
     <p>{description}</p>
     <h5>{date}</h5>
 </div>
 """
-folder["dorss"] = True
-folder["rsstemplate"] = """<rss version="2.0">
+folder.dorss = True
+folder.rsstemplate = """<rss version="2.0">
   <channel>
     <title>Sample Title</title>
     <link>https://example.com</link>
@@ -44,7 +45,7 @@ folder["rsstemplate"] = """<rss version="2.0">
     {items}
   </channel>
 </rss>"""
-folder["rssitemtemplate"] = """
+folder.rssitemtemplate = """
 <item>
     <title>{title}</title>
     <link>build/articles/{path}</link>
