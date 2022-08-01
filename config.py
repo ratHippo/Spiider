@@ -24,7 +24,7 @@ folder.indextemplate = """
     <title></title>
   </head>
   <body>
-    {previews}
+    {items}
   </body>
 </html>
 """

@@ -52,48 +52,26 @@ def write_articles(articles, folder):
 
                 if os.path.isdir(folder.srcdir+dir):
                         shutil.copytree(folder.srcdir+dir, folder.builddir+dir)
-#Generate index page
-def generate_preview(metadata, folder, returndate = False):
-    #Generates preview given metadata and template
-    data = metadata
 
-    preview = folder.previewtemplate.format(
-    path = data["path"], title = data["title"], description = data["description"], date = data["date"], 
-    )
-    if returndate: return [data["date"], preview]
-    else: return preview
-def generate_index_page(articles, folder):
-    #Generates index page
-
-    #sorts list by reverse date
-    preview_list = list(generate_preview(get_metadata(folder, article), folder, True) for article in articles)
-    preview_list = list([list(reversed(i[0].split("-"))), i[1]] for i in preview_list)
-    preview_list.sort()
-    preview_list = list(reversed(preview_list))
-    preview_list = list(i[1] for i in preview_list)
-
-    previews = '\n'.join(preview_list)
-    return folder.indextemplate.format(previews = previews)
-#Generate RSS
-def generate_rss_item(metadata, folder, returndate = False):
-    #Generates RSS item given metadata
-    data = metadata
-
-    item = folder.rssitemtemplate.format(
-    path = data["path"], title = data["title"], description = data["description"]
-    )
-    if returndate: return [data["date"], item]
+#Generate indexes
+# The process used to generate an HTML index page and an RSS page are basically the same, only with different templates; therefore, generic functions are used
+def generate_item(metadata, itemtemplate, returndate = False):
+    #Generates item given metadata and template
+    item = itemtemplate.format(
+    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"])
+    if returndate: return [metadata["date"], item]
     else: return item
-def generate_rss_page(articles, folder):
+def generate_page(articles, folder, itemtemplate, pagetemplate):
     #Generates an rss file using a list of items
-    item_list = list(generate_rss_item(get_metadata(folder, article), folder, True) for article in articles)
+    item_list = list(generate_item(get_metadata(folder, article), itemtemplate, True) for article in articles)
     item_list = list([list(reversed(i[0].split("-"))), i[1]] for i in item_list)
     item_list.sort()
     item_list = list(reversed(item_list))
     item_list = list(i[1] for i in item_list)
 
     items = '\n'.join(item_list)
-    return folder.rsstemplate.format(items = items)
+    return pagetemplate.format(items = items)
+
 #Build
 def build(folder):
     #Builds a folder using the functions above
@@ -105,12 +83,12 @@ def build(folder):
     write_articles(articles, folder)
     print(folder.indexdir[:-1]+": writing index page...")
     index = open(folder.indexdir + "index.html", "w")
-    index.write(generate_index_page(articles, folder))
+    index.write(generate_page(articles, folder, folder.previewtemplate, folder.indextemplate))
     index.close()
     if folder.dorss:
         print(folder.indexdir[:-1]+": generating rss...")
         index = open(folder.indexdir + "index.rss", "w")
-        index.write(generate_rss_page(articles, folder))
+        index.write(generate_page(articles, folder, folder.rssitemtemplate, folder.rsstemplate))
         index.close()
 def cli(args):
     if args[0] == "build":
