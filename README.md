@@ -10,11 +10,10 @@ The sample configuration file "config.py" defines a sample config. You can get t
 |-------------|-------------|
 | srcdir | The directory with the source articles |
 | indexdir | The directory in which to place the index page |
-| indexlinkdir | the link from the indexdir to the builddir |
 | builddir | The directory in which to place the built articles |
 | articletemplate | The template HTML for an article Use {title} and {text} to place the title and text |
-| indextemplate | The template HTML for the index page. Use {previews} to place the article previews |
-| previewtemplate | The template HTML for the article previews seen on the index page. Use {indexlinkdir} for the indexlinkdir (see above). Use {path} for the path of the article (if you use {indexlinkdir}+{path} then you get the link to the article). You can use {title}, {description}, and {date} for the title, description, and date.|
+| indextemplate | The template HTML for the index page. Use {items} to place the article previews |
+| previewtemplate | The template HTML for the article previews seen on the index page. Use {path} for the path of the article. then you get the link to the article). You can use {title}, {description}, and {date} for the title, description, and date.|
 | dorss | Whether or not to generate an RSS feed. True or False |
 | rsstemplate | RSS template, use {items to put in the rss items}|
 | rssitemtemplate | use {title}, {path}, and {description} to get the title, path and description |

@@ -2,7 +2,6 @@ from spiider import Folder
 folder = Folder()
 folder.srcdir = "src/articles/"
 folder.indexdir = "build/"
-folder.indexlinkdir = "articles/"
 folder.builddir = "build/articles/"
 folder.articletemplate = """
 <!DOCTYPE html>
@@ -31,7 +30,7 @@ folder.indextemplate = """
 """
 folder.previewtemplate = """
 <div>
-    <a href = {indexlinkdir}{path}><h3>{title}</h3></a>
+    <a href = articles/{path}><h3>{title}</h3></a>
     <p>{description}</p>
     <h5>{date}</h5>
 </div>

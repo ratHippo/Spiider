@@ -1,8 +1,8 @@
 import json, os, markdown, config, sys, shutil
 
 class Folder:
-    def __init__(self, srcdir = "",indexdir = "", indexlinkdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dorss = False, rsstemplate = "", rssitemtemplate = ""):
-        self.srcdir, self.indexdir, self.indexlinkdir, self.builddir, self.articletemplate, self.indextemplate, self.previewtemplate, self.dorss, self.rsstemplate, self.rssitemtemplate = srcdir, indexdir, indexlinkdir, builddir, articletemplate, indextemplate, previewtemplate, dorss, rsstemplate, rssitemtemplate
+    def __init__(self, srcdir = "",indexdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dorss = False, rsstemplate = "", rssitemtemplate = ""):
+        self.srcdir, self.indexdir, self.builddir, self.articletemplate, self.indextemplate, self.previewtemplate, self.dorss, self.rsstemplate, self.rssitemtemplate = srcdir, indexdir, builddir, articletemplate, indextemplate, previewtemplate, dorss, rsstemplate, rssitemtemplate
 def get_article_list(folder):
     articles = []
     for article in os.listdir(folder.srcdir):
@@ -58,7 +58,7 @@ def generate_preview(metadata, folder, returndate = False):
     data = metadata
 
     preview = folder.previewtemplate.format(
-    path = data["path"], title = data["title"], description = data["description"], date = data["date"], indexlinkdir = folder.indexlinkdir
+    path = data["path"], title = data["title"], description = data["description"], date = data["date"], 
     )
     if returndate: return [data["date"], preview]
     else: return preview
