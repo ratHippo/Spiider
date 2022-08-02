@@ -1,4 +1,5 @@
 import json, os, markdown, config, sys, shutil
+from datetime import datetime
 
 class Folder:
     def __init__(self, srcdir = "",indexdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dorss = False, rsstemplate = "", rssitemtemplate = ""):
@@ -11,7 +12,6 @@ def get_article_list(folder):
     return articles
 def get_metadata(folder, article):
     #markdown
-    
     if os.path.exists(folder.srcdir+article+"/article.md"):
         md = markdown.Markdown(extensions=['full_yaml_metadata'])
         md.convert(open(folder.srcdir+article+"/article.md","r").read())
@@ -26,10 +26,10 @@ def get_metadata(folder, article):
 #Generate articles
 def generate_article(article, markdownpath, folder):
     #Generates HTML given json for metadata, md for text, and template"
-    data = get_metadata(folder, article)
+    metadata = get_metadata(folder, article)
     article = markdown.markdown(open(markdownpath,"r").read(), extensions=['full_yaml_metadata'])
 
-    return folder.articletemplate.format(title = data["title"], data = data["date"], article = article)
+    return folder.articletemplate.format(title = metadata["title"], date = metadata["date"], article = article)
 def write_articles(articles, folder):
     #Writes Articles to folders
     for article in articles:
@@ -58,13 +58,13 @@ def write_articles(articles, folder):
 def generate_item(metadata, itemtemplate, returndate = False):
     #Generates item given metadata and template
     item = itemtemplate.format(
-    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"])
-    if returndate: return [metadata["date"], item]
+    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime("%a, %d %b %Y"))
+    if returndate: return [datetime.strptime(metadata["date"], config.datetimeformat), item]
     else: return item
 def generate_page(articles, folder, itemtemplate, pagetemplate):
     #Generates an rss file using a list of items
     item_list = list(generate_item(get_metadata(folder, article), itemtemplate, True) for article in articles)
-    item_list = list([list(reversed(i[0].split("-"))), i[1]] for i in item_list)
+    item_list = list([item[0].strftime("%Y%m%d%H%M%S"), item[1]] for item in item_list)
     item_list.sort()
     item_list = list(reversed(item_list))
     item_list = list(i[1] for i in item_list)
@@ -104,7 +104,7 @@ def cli(args):
         name = args[2]
         if not os.path.exists(folder.srcdir + name): os.mkdir(folder.srcdir + name)
         file = open(folder.srcdir + f"{name}/article.md", "w")
-        file.write("""---\ntitle: Sample\ndescription: This is a Sample Article\ndate: 7-23-22\npath: sample\ntesting: false\n---""")
+        file.write(f"""---\ntitle: Sample\ndescription: This is a Sample Article\ndate: \"{datetime.now().strftime(config.datetimeformat)}\"\npath: {name}\ntesting: false\n---""")
         file.close()
     elif args[0] == "remove":
         input("This will remove the article and all files in the article's directory. Exit the program if you want to prevent this. Press enter to continue.")

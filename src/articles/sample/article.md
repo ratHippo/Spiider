@@ -1,7 +1,7 @@
 ---
 title: Sample
 description: This is a Sample Article
-date: 7-23-22
+date: "2022-07-23"
 path: sample
 testing: false
 ---

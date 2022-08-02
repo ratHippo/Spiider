@@ -1,4 +1,5 @@
 from spiider import Folder
+datetimeformat = "%Y-%m-%d"
 folder = Folder()
 folder.srcdir = "src/articles/"
 folder.indexdir = "build/"
@@ -49,6 +50,7 @@ folder.rssitemtemplate = """
     <title>{title}</title>
     <link>build/articles/{path}</link>
     <description>{description}</description>
+    <pubDate>{fulldate}</pubDate>
 </item>
 """
 folders = {"folder":folder}

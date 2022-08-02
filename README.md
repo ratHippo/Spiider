@@ -102,7 +102,7 @@ or something similar to create your article. Assuming you haven't already change
 ---
 title: My First Article
 description: This is my first article I wrote with spiider!
-date: 1-8-22
+date: 22-08-01
 path: myfirstarticle
 testing: false
 ---
@@ -112,7 +112,7 @@ add some markdown underneath the metadata, and you've got yourself an article, w
 ---
 title: My First Article
 description: This is my first article I wrote using spiider!
-date: 1-8-22
+date: 22-08-01
 path: myfirstarticle
 testing: false
 ---
@@ -160,18 +160,19 @@ The sample configuration file "config.py" defines a sample config. You can get t
 | builddir | The directory in which to place the built articles |
 | articletemplate | The template HTML for an article Use {title} and {text} to place the title and text |
 | indextemplate | The template HTML for the index page. Use {items} to place the article previews |
-| previewtemplate | The template HTML for the article previews seen on the index page. Use {path} for the path of the article. then you get the link to the article). You can use {title}, {description}, and {date} for the title, description, and date.|
+| previewtemplate | The template HTML for the article previews seen on the index page. Use {path} for the path of the article. then you get the link to the article). You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in your own format, and date in 'Mon, 01 Jan 2000' format.|
 | dorss | Whether or not to generate an RSS feed. True or False |
-| rsstemplate | RSS template, use {items to put in the rss items}|
-| rssitemtemplate | use {title}, {path}, and {description} to get the title, path and description |
+| rsstemplate | RSS template, use {items} to put in the rss items|
+| rssitemtemplate | Template for RSS items. You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in your own format, and date in 'Mon, 01 Jan 2000' format. (use this for pubDate) |
 
+The main config also has one property: the datetimeformat property. This is just a format string, see [strftime.org](https://strftime.org)
 ## Writing
 To write an article, navigate to the directory which has spiider.py in it. Then run `python3 spiider.py new {foldername} {articlename}`. A directory with the article name you put should be located in your source directory. There should be a file in this folder called 'article.md' The file should contain metadata that looks like this:
 ```
 ---
 title:{insert title}
 description: {insert description}
-date: {insert date}
+date: "{insert date}" (remember to put quotes around it to garuntee it is interpreted as a string, rather than a datetime.date)
 path: {insert path}
 testing: {insert testing (bool)}
 ---
