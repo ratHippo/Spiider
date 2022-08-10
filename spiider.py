@@ -1,4 +1,4 @@
-import json, os, markdown, config, sys, shutil
+import os, markdown, config, sys, shutil
 from datetime import datetime
 
 class Folder:
@@ -17,16 +17,12 @@ def get_metadata(folder, article):
         md = markdown.Markdown(extensions=['full_yaml_metadata'])
         md.convert(open(folder.srcdir+article+"/article.md","r").read())
         return(md.Meta)
-    #json
-    elif os.path.exists(folder.srcdir+article+"/metadata.json"):
-        metadata = json.loads(open(folder.srcdir+article+"/metadata.json","r").read())
-        return metadata
     #none
     else:
         return None
 #Generate articles
 def generate_article(article, markdownpath, folder):
-    #Generates HTML given json for metadata, md for text, and template"
+    #Generates HTML given md for metadata, md for text, and template"
     metadata = get_metadata(folder, article)
     article = markdown.markdown(open(markdownpath,"r").read(), extensions=['full_yaml_metadata'])
 
@@ -43,7 +39,7 @@ def write_articles(articles, folder):
             file.write(html)
             file.close()
 
-        #Although this script is intended for use with .md, we should still be able to use folders and other filetypes
+        #Copy other files such as an assets folder
         for file in os.listdir(folder.srcdir+article):
             dir = article + "/" + file
             if not os.path.exists(folder.builddir+dir):

@@ -1,7 +1,7 @@
 # Spiider
 
 ## About
-Spiider is a python script for generating websites (Spiider makes webs). It takes a markdown file and converts it to html using a template and metadata from either the markdown itself or an external json file. It also copies over any other files, meaning you can add plain HTML or assets. It then uses templates for an index page and templates for previews to generate an index page. It does the same thing as the index page for feeds (atom or RSS), just using different templates.
+Spiider is a python script for generating websites (Spiider makes webs). It takes a markdown file and converts it to html using a template and metadata from inside the markdown. It also copies over any other files, meaning you can add plain HTML or assets. It then uses templates for an index page and templates for previews to generate an index page. It does the same thing as the index page for feeds (atom or RSS), just using different templates.
 
 ## Quickstart
 First of all, you'll need to clone the repository. Run 
@@ -10,7 +10,7 @@ git clone https://github.com/rathippo/spiider {your website name here}
 ```
 To use the script, you're going to need to install some packages. To make sure you have everything you need, just use
 ```bash
-pip3 install json markdown markdown-full-yaml-metadata
+pip3 install markdown markdown-full-yaml-metadata
 ```
 Now that you have all the necessary things installed, navigate into the directory where you cloned the repo and remove the sample article. 
 ```bash
@@ -211,3 +211,11 @@ To build a single article run:
 
 `python3 spiider.py build foldername articlename`
 (keep in mind that this won't update the index page)
+
+## Future
+
+I can't exactly commit to a roadmap, but here are some ideas for what the future of this project might look like:
+
+  * Extensions: non-essential features such as feeds, will be written into seperate files. Most new features will be added as extensions.
+
+  * More templating languages: More templating languages will be supported
