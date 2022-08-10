@@ -1,5 +1,7 @@
 from spiider import Folder
+
 datetimeformat = "%Y-%m-%d"
+fulldateformat = "%a, %d %b %Y"
 folder = Folder()
 folder.srcdir = "src/articles/"
 folder.indexdir = "build/"

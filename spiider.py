@@ -4,6 +4,7 @@ from datetime import datetime
 class Folder:
     def __init__(self, srcdir = "",indexdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dofeed = False, feedtemplate = "", feeditemtemplate = ""):
         self.srcdir, self.indexdir, self.builddir, self.articletemplate, self.indextemplate, self.previewtemplate, self.dofeed, self.feedtemplate, self.feeditemtemplate = srcdir, indexdir, builddir, articletemplate, indextemplate, previewtemplate, dofeed, feedtemplate, feeditemtemplate
+
 def get_article_list(folder):
     articles = []
     for article in os.listdir(folder.srcdir):
@@ -58,7 +59,7 @@ def write_articles(articles, folder):
 def generate_item(metadata, itemtemplate, returndate = False):
     #Generates item given metadata and template
     item = itemtemplate.format(
-    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime("%a, %d %b %Y"))
+    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime(config.fulldateformat))
     if returndate: return [datetime.strptime(metadata["date"], config.datetimeformat), item]
     else: return item
 def generate_page(articles, folder, itemtemplate, pagetemplate):
@@ -76,8 +77,8 @@ def generate_page(articles, folder, itemtemplate, pagetemplate):
 def build(folder):
     #Builds a folder using the functions above
     print(folder.indexdir[:-1]+": setting up directories...")
-    if not os.path.exists(folder.indexdir): os.mkdir(folder.indexdir)
-    if not os.path.exists(folder.builddir): os.mkdir(folder.builddir)
+    for d in (folder.indexdir, folder.builddir): 
+        if not os.path.exists(d): os.mkdir(d)
     articles = get_article_list(folder)
     print(folder.indexdir[:-1]+": writing articles...")
     write_articles(articles, folder)
@@ -105,7 +106,7 @@ def cli(args):
         if not os.path.exists(folder.srcdir + name): os.mkdir(folder.srcdir + name)
         file = open(folder.srcdir + f"{name}/article.md", "w")
         file.write(f"""---\ntitle: Sample\ndescription: This is a Sample Article\ndate: \"{datetime.now().strftime(config.datetimeformat)}\"\npath: {name}\ntesting: false\n---""")
-        file.close()
+        file.close()      
     elif args[0] == "remove":
         input("This will remove the article and all files in the article's directory. Exit the program if you want to prevent this. Press enter to continue.")
         folder = config.folders[args[1]]

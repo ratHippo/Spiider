@@ -151,21 +151,29 @@ go to [http://localhost:8000](http://localhost:8000) in your browser, and if all
 
 
 ## Configuration
-The sample configuration file "config.py" defines a sample config. You can get this config in any way you want, all that matters is that you have a dictionary of subconfigs named "folders" with the keys being the names of the folders you want to use in the CLI and the value being the folders themselves. Each subconfig is a "Folder" object which uses the following properties:
+The sample configuration file "config.py" defines a sample config. You can get this config in any way you want, all that matters is that you have the following properties set: :
+|   Property  |   Details   |
+|-------------|-------------|
+| `datetimeformat` | A format string for your prefered time format, see [strftime.org](https://strftime.org) |
+| `fulldateformat` | A format string for the date format you use in your feed. By default this works for RSS `<pubDate>`, see [strftime.org](https://strftime.org)
+| `folders` | A dictionary of `Folder` objects with the properties below. The key should be the name you want to call the folder when using the CLI
+
+The  `Folder` objects mentioned above have the following properties:
 
 |   Property  |   Details   |
 |-------------|-------------|
-| srcdir | The directory with the source articles |
-| indexdir | The directory in which to place the index page |
-| builddir | The directory in which to place the built articles |
-| articletemplate | The template HTML for an article Use {title} and {text} to place the title and text |
-| indextemplate | The template HTML for the index page. Use {items} to place the article previews |
-| previewtemplate | The template HTML for the article previews seen on the index page. Use {path} for the path of the article. then you get the link to the article). You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in your own format, and date in 'Mon, 01 Jan 2000' format.|
-| dofeed | Whether or not to generate a feed (RSS, atom, etc.). True or False |
-| feedtemplate | Feed template, use {items} to put in the feed items|
-| feeditemtemplate | Template for feed items. You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in your own format, and date in 'Mon, 01 Jan 2000' format. (use this for pubDate) |
+| `srcdir` | The directory with the source articles |
+| `indexdir` | The directory in which to place the index page |
+| `builddir` | The directory in which to place the built articles |
+| `articletemplate` | The template HTML for an article Use {title} and {text} to place the title and text |
+| `indextemplate` | The template HTML for the index page. Use {items} to place the article previews |
+| `previewtemplate` | The template HTML for the article previews seen on the index page. Use {path} for the path of the article. then you get the link to the article). You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in the format specified by `datetimeformat` above, and date in the format specified by  `fulldateformat` above.|
+| `dofeed` | Whether or not to generate a feed (RSS, atom, etc.). True or False |
+| `feedtemplate` | Feed template, use {items} to put in the feed items|
+| `feeditemtemplate` | Template for feed items. You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in your own format, and date in the format format. (use this for pubDate) |
 
-The main config also has one property: the datetimeformat property. This is just a format string, see [strftime.org](https://strftime.org)
+
+
 ## Writing
 To write an article, navigate to the directory which has spiider.py in it. Then run `python3 spiider.py new {foldername} {articlename}`. A directory with the article name you put should be located in your source directory. There should be a file in this folder called 'article.md' The file should contain metadata that looks like this:
 ```
@@ -180,11 +188,11 @@ testing: {insert testing (bool)}
 See the table below for what each point of data means
 | Property | Details |
 |-|-|
-| title | The title of the article |
-| description | A short description of the article |
-| date | The date the article was written |
-| path | The name of the folder that you created for the article
-| testing | True or false: if false the article will be ignored by the builder|
+| `title` | The title of the article |
+| `description` | A short description of the article |
+| `date` | The date the article was written |
+| `path` | The name of the folder that you created for the article
+| `testing` | True or false: if false the article will be ignored by the builder|
 
 Edit this metadata in your article to change how it will be displayed.
 To add text to your article, simply write markdown in the resto of the file
