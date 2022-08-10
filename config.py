@@ -36,8 +36,8 @@ folder.previewtemplate = """
     <h5>{date}</h5>
 </div>
 """
-folder.dorss = True
-folder.rsstemplate = """<rss version="2.0">
+folder.dofeed = True
+folder.feedtemplate = """<rss version="2.0">
   <channel>
     <title>Sample Title</title>
     <link>https://example.com</link>
@@ -45,7 +45,7 @@ folder.rsstemplate = """<rss version="2.0">
     {items}
   </channel>
 </rss>"""
-folder.rssitemtemplate = """
+folder.feeditemtemplate = """
 <item>
     <title>{title}</title>
     <link>build/articles/{path}</link>

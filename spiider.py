@@ -2,8 +2,8 @@ import json, os, markdown, config, sys, shutil
 from datetime import datetime
 
 class Folder:
-    def __init__(self, srcdir = "",indexdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dorss = False, rsstemplate = "", rssitemtemplate = ""):
-        self.srcdir, self.indexdir, self.builddir, self.articletemplate, self.indextemplate, self.previewtemplate, self.dorss, self.rsstemplate, self.rssitemtemplate = srcdir, indexdir, builddir, articletemplate, indextemplate, previewtemplate, dorss, rsstemplate, rssitemtemplate
+    def __init__(self, srcdir = "",indexdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dofeed = False, feedtemplate = "", feeditemtemplate = ""):
+        self.srcdir, self.indexdir, self.builddir, self.articletemplate, self.indextemplate, self.previewtemplate, self.dofeed, self.feedtemplate, self.feeditemtemplate = srcdir, indexdir, builddir, articletemplate, indextemplate, previewtemplate, dofeed, feedtemplate, feeditemtemplate
 def get_article_list(folder):
     articles = []
     for article in os.listdir(folder.srcdir):
@@ -54,7 +54,7 @@ def write_articles(articles, folder):
                         shutil.copytree(folder.srcdir+dir, folder.builddir+dir)
 
 #Generate indexes
-# The process used to generate an HTML index page and an RSS page are basically the same, only with different templates; therefore, generic functions are used
+# The process used to generate an HTML index page and an feed page are basically the same, only with different templates; therefore, generic functions are used
 def generate_item(metadata, itemtemplate, returndate = False):
     #Generates item given metadata and template
     item = itemtemplate.format(
@@ -62,7 +62,7 @@ def generate_item(metadata, itemtemplate, returndate = False):
     if returndate: return [datetime.strptime(metadata["date"], config.datetimeformat), item]
     else: return item
 def generate_page(articles, folder, itemtemplate, pagetemplate):
-    #Generates an rss file using a list of items
+    #Generates an feed file using a list of items
     item_list = list(generate_item(get_metadata(folder, article), itemtemplate, True) for article in articles)
     item_list = list([item[0].strftime("%Y%m%d%H%M%S"), item[1]] for item in item_list)
     item_list.sort()
@@ -85,10 +85,10 @@ def build(folder):
     index = open(folder.indexdir + "index.html", "w")
     index.write(generate_page(articles, folder, folder.previewtemplate, folder.indextemplate))
     index.close()
-    if folder.dorss:
-        print(folder.indexdir[:-1]+": generating rss...")
-        index = open(folder.indexdir + "index.rss", "w")
-        index.write(generate_page(articles, folder, folder.rssitemtemplate, folder.rsstemplate))
+    if folder.dofeed:
+        print(folder.indexdir[:-1]+": generating feed...")
+        index = open(folder.indexdir + "feed.xml", "w")
+        index.write(generate_page(articles, folder, folder.feeditemtemplate, folder.feedtemplate))
         index.close()
 def cli(args):
     if args[0] == "build":
