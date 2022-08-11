@@ -40,15 +40,10 @@ def write_articles(articles, folder):
         for file in os.listdir(folder.srcdir+article):
             dir = article + "/" + file
             if not os.path.exists(folder.builddir+dir):
-                if file.endswith(".html"):
-                    if not os.path.exists(folder.builddir + article): os.mkdir(folder.builddir + article)
-                    shutil.copyfile(folder.srcdir+dir, folder.builddir+dir)
-
                 if os.path.isdir(folder.srcdir+dir):
                         shutil.copytree(folder.srcdir+dir, folder.builddir+dir)
 
-#Generate indexes
-# The process used to generate an HTML index page and an feed page are basically the same, only with different templates; therefore, generic functions are used
+#Generate index
 def generate_item(metadata, itemtemplate, returndate = False):
     #Generates item given metadata and template
     item = itemtemplate.format(
@@ -59,12 +54,10 @@ def generate_page(articles, folder, itemtemplate, pagetemplate):
     #Generates an feed file using a list of items
     item_list = list(generate_item(get_metadata(folder, article), itemtemplate, True) for article in articles)
     item_list = list([item[0].strftime("%Y%m%d%H%M%S"), item[1]] for item in item_list)
-    item_list.sort()
-    item_list = list(reversed(item_list))
+    item_list.sort(reverse=True)
     item_list = list(i[1] for i in item_list)
 
-    items = '\n'.join(item_list)
-    return pagetemplate.format(items = items)
+    return pagetemplate.format(items = '\n'.join(item_list))
 
 #Build
 def build(folder):
@@ -81,9 +74,9 @@ def build(folder):
     index.close()
     if folder.dofeed:
         print(folder.indexdir[:-1]+": generating feed...")
-        index = open(folder.indexdir + "feed.xml", "w")
-        index.write(generate_page(articles, folder, folder.feeditemtemplate, folder.feedtemplate))
-        index.close()
+        feed = open(folder.indexdir + "feed.xml", "w")
+        feed.write(generate_page(articles, folder, folder.feeditemtemplate, folder.feedtemplate))
+        feed.close()
 def cli(args):
     if args[0] == "build":
         if len(args) == 1:
@@ -109,8 +102,7 @@ def cli(args):
         folder = config.folders[args[1]]
         name = args[2]
         new_name = args[3]
-        shutil.move(folder.srcdir + name, folder.srcdir + new_name)
-        
+        shutil.move(folder.srcdir + name, folder.srcdir + new_name)   
     else:
          print("No such thing as argument \'"+args[0]+"\'.")
 
