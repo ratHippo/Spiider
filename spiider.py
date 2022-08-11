@@ -12,28 +12,25 @@ def get_article_list(folder):
             articles.append(article)
     return articles
 def get_metadata(folder, article):
-    #markdown
     if os.path.exists(folder.srcdir+article+"/article.md"):
         md = markdown.Markdown(extensions=['full_yaml_metadata'])
         md.convert(open(folder.srcdir+article+"/article.md","r").read())
+        md.Meta["content"] = markdown.markdown(open(folder.srcdir+article+"/article.md","r").read(), extensions = ['full_yaml_metadata'])
         return(md.Meta)
     #none
     else:
         return None
 #Generate articles
-def generate_article(article, markdownpath, folder):
+def generate_article(article, folder):
     #Generates HTML given md for metadata, md for text, and template"
     metadata = get_metadata(folder, article)
-    article = markdown.markdown(open(markdownpath,"r").read(), extensions=['full_yaml_metadata'])
-
-    return folder.articletemplate.format(title = metadata["title"], date = metadata["date"], article = article)
+    return folder.articletemplate.format(title = metadata["title"], date = metadata["date"], article = metadata["content"])
 def write_articles(articles, folder):
     #Writes Articles to folders
     for article in articles:
         if os.path.exists(folder.srcdir + article + "/article.md"):
 
-            markdownpath = folder.srcdir + f"{article}/article.md"
-            html = generate_article(article, markdownpath, folder)
+            html = generate_article(article, folder)
             if not os.path.exists(folder.builddir + article): os.mkdir(folder.builddir + article)
             file = open(folder.builddir + f"{article}/index.html", "w")
             file.write(html)
