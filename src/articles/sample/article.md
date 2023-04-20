@@ -4,6 +4,7 @@ description: This is a Sample Article
 date: "2022-07-23"
 path: sample
 testing: false
+tags: ["sample", "hasatag"]
 ---
 
 ## Examples

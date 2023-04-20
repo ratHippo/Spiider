@@ -2,8 +2,8 @@ import os, markdown, config, sys, shutil
 from datetime import datetime
 
 class Folder:
-    def __init__(self, srcdir = "",indexdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dofeed = False, feedtemplate = "", feeditemtemplate = ""):
-        self.srcdir, self.indexdir, self.builddir, self.articletemplate, self.indextemplate, self.previewtemplate, self.dofeed, self.feedtemplate, self.feeditemtemplate = srcdir, indexdir, builddir, articletemplate, indextemplate, previewtemplate, dofeed, feedtemplate, feeditemtemplate
+    def __init__(self, srcdir = "",indexdir = "", builddir = "", articletemplate = "", indextemplate = "", previewtemplate = "", dofeed = False, feedtemplate = "", feeditemtemplate = "", dotags = False, tagdir = "", tagtemplate="", feedtagtemplate = ""):
+        self.srcdir, self.indexdir, self.builddir, self.articletemplate, self.indextemplate, self.previewtemplate, self.dofeed, self.feedtemplate, self.feeditemtemplate, self.dotags, self.tagdir, self.tagtemplate, self.feedtagtemplate = srcdir, indexdir, builddir, articletemplate, indextemplate, previewtemplate, dofeed, feedtemplate, feeditemtemplate, dotags, tagdir, tagtemplate, feedtagtemplate
 
 def get_article_list(folder):
     articles = []
@@ -44,15 +44,16 @@ def write_articles(articles, folder):
                         shutil.copytree(folder.srcdir+dir, folder.builddir+dir)
 
 #Generate index
-def generate_item(metadata, itemtemplate, returndate = False):
+def generate_item(metadata, itemtemplate, tagtemplate, returndate = False):
     #Generates item given metadata and template
+    tags = '\n'.join(tagtemplate.format(name = tag) for tag in metadata["tags"])
     item = itemtemplate.format(
-    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime(config.fulldateformat))
+    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime(config.fulldateformat), tags = tags)
     if returndate: return [datetime.strptime(metadata["date"], config.datetimeformat), item]
     else: return item
-def generate_page(articles, folder, itemtemplate, pagetemplate):
+def generate_page(articles, folder, itemtemplate, tagtemplate, pagetemplate):
     #Generates an feed file using a list of items
-    item_list = list(generate_item(get_metadata(folder, article), itemtemplate, True) for article in articles)
+    item_list = list(generate_item(get_metadata(folder, article), itemtemplate, tagtemplate, True) for article in articles)
     item_list = list([item[0].strftime("%Y%m%d%H%M%S"), item[1]] for item in item_list)
     item_list.sort(reverse=True)
     item_list = list(i[1] for i in item_list)
@@ -70,13 +71,32 @@ def build(folder):
     write_articles(articles, folder)
     print(folder.indexdir[:-1]+": writing index page...")
     index = open(folder.indexdir + "index.html", "w")
-    index.write(generate_page(articles, folder, folder.previewtemplate, folder.indextemplate))
+    index.write(generate_page(articles, folder, folder.previewtemplate, folder.tagtemplate, folder.indextemplate))
     index.close()
     if folder.dofeed:
         print(folder.indexdir[:-1]+": generating feed...")
         feed = open(folder.indexdir + "feed.xml", "w")
-        feed.write(generate_page(articles, folder, folder.feeditemtemplate, folder.feedtemplate))
+        feed.write(generate_page(articles, folder, folder.feeditemtemplate, folder.feedtagtemplate, folder.feedtemplate))
         feed.close()
+    
+    if folder.dotags:
+        tags = []
+        for article in articles:
+            for tag in get_metadata(folder, article)["tags"]:
+                if tag not in tags:
+                    tags.append(tag)
+        for d in tuple(folder.tagdir + tag + "/" for tag in tags) + (folder.tagdir,) : 
+            if not os.path.exists(d): 
+                os.makedirs(d)
+        
+        for tag in tags:
+            tag_articles = []
+            for article in articles:
+                if tag in get_metadata(folder, article)["tags"]:
+                    tag_articles.append(article)
+            index = open(folder.tagdir + tag + "/index.html", "w")
+            index.write(generate_page(articles, folder, folder.previewtemplate, folder.tagtemplate, folder.indextemplate))
+            index.close() 
 def cli(args):
     if args[0] == "build":
         if len(args) == 1:

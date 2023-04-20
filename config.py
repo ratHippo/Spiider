@@ -33,9 +33,10 @@ folder.indextemplate = """
 """
 folder.previewtemplate = """
 <div>
-    <a href = articles/{path}><h3>{title}</h3></a>
+    <a href = /articles/{path}><h3>{title}</h3></a>
     <p>{description}</p>
     <h5>{date}</h5>
+    <div>{tags}<div>
 </div>
 """
 folder.dofeed = True
@@ -55,4 +56,7 @@ folder.feeditemtemplate = """
     <pubDate>{fulldate}</pubDate>
 </item>
 """
+folder.dotags = True
+folder.tagdir = "build/tags/"
+folder.tagtemplate = "<a href = '/tags/{name}' class = 'tag tag_{name}'>{name}</a>"
 folders = {"folder":folder}
