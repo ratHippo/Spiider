@@ -172,8 +172,8 @@ The  `Folder` objects mentioned above have the following properties:
 | `srcdir` | The directory with the source articles |
 | `indexdir` | The directory in which to place the index page |
 | `builddir` | The directory in which to place the built articles |
-| `articletemplate` | The template HTML for an article Use {title} and {text} to place the title and text |
-| `indextemplate` | The template HTML for the index page. Use {items} to place the article previews |
+| `articletemplate` | The template HTML for an article Use {title} and {text} to place the title and text. You can also use {description}, {path}, and {date}. For the description, filename, and date in the format specified by `datetimeformat` |
+| `indextemplate` | The template HTML for the index page. Use {items} to place the article previews, and {fulldate} for the most recently updated date in the date format specified by `fulldateformat`.|
 | `previewtemplate` | The template HTML for the article previews seen on the index page. Use {path} for the path of the article. then you get the link to the article). You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in the format specified by `datetimeformat` above, and date in the format specified by  `fulldateformat` above.|
 | `dofeed` | Whether or not to generate a feed (RSS, atom, etc.). True or False |
 | `feedtemplate` | Feed template, use {items} to put in the feed items|

@@ -24,7 +24,7 @@ def get_metadata(folder, article):
 def generate_article(article, folder):
     #Generates HTML given md for metadata, md for text, and template"
     metadata = get_metadata(folder, article)
-    return folder.articletemplate.format(title = metadata["title"], date = metadata["date"], article = metadata["content"])
+    return folder.articletemplate.format(path = metadata["path"], title = metadata["title"], date = metadata["date"], description = metadata["description"], article = metadata["content"])
 def write_articles(articles, folder):
     #Writes Articles to folders
     for article in articles:
@@ -44,21 +44,29 @@ def write_articles(articles, folder):
                         shutil.copytree(folder.srcdir+dir, folder.builddir+dir)
 
 #Generate index
-def generate_item(metadata, itemtemplate, tagtemplate, returndate = False):
+def generate_item(metadata, itemtemplate, tagtemplate, dotags = False, returndate = False):
     #Generates item given metadata and template
-    tags = '\n'.join(tagtemplate.format(name = tag) for tag in metadata["tags"])
-    item = itemtemplate.format(
-    path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime(config.fulldateformat), tags = tags)
+    if dotags:
+        tags = '\n'.join(tagtemplate.format(name = tag) for tag in metadata["tags"])
+    if dotags:
+        item = itemtemplate.format(
+            path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime(config.fulldateformat), tags = tags
+        )
+    else:
+        item = itemtemplate.format(
+            path = metadata["path"], title = metadata["title"], description = metadata["description"], date = metadata["date"], fulldate = datetime.strptime(metadata["date"], config.datetimeformat).strftime(config.fulldateformat),
+        )
     if returndate: return [datetime.strptime(metadata["date"], config.datetimeformat), item]
     else: return item
 def generate_page(articles, folder, itemtemplate, tagtemplate, pagetemplate):
     #Generates an feed file using a list of items
-    item_list = list(generate_item(get_metadata(folder, article), itemtemplate, tagtemplate, True) for article in articles)
+    item_list = list(generate_item(get_metadata(folder, article), itemtemplate, tagtemplate, folder.dotags, True) for article in articles)
     item_list = list([item[0].strftime("%Y%m%d%H%M%S"), item[1]] for item in item_list)
     item_list.sort(reverse=True)
+    updated = datetime.strptime(item_list[0][0], "%Y%m%d%H%M%S").strftime(config.fulldateformat)
     item_list = list(i[1] for i in item_list)
 
-    return pagetemplate.format(items = '\n'.join(item_list))
+    return pagetemplate.format(items = '\n'.join(item_list), fulldate = updated)
 
 #Build
 def build(folder):
