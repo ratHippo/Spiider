@@ -17,8 +17,10 @@ Now that you have all the necessary things installed, navigate into the director
 python3 spiider.py remove folder sample
 ```
 Now, you don't want to stick with the default config. Open up config.py using your favorite text editor. Before you edit, it should look like this:
-```python
-from spiider import Folder
+```from spiider import Folder
+
+datetimeformat = "%Y-%m-%d"
+fulldateformat = "%a, %d %b %Y"
 folder = Folder()
 folder.srcdir = "src/articles/"
 folder.indexdir = "build/"
@@ -26,18 +28,16 @@ folder.builddir = "build/articles/"
 folder.articletemplate = """
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    ...
- </html>
+  ...
 """
 folder.indextemplate = """
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  ...
+ ...
 </html>
 """
 folder.previewtemplate = """
 <div>
-   ...
+  ...
 </div>
 """
 folder.dofeed = True
@@ -46,9 +46,12 @@ folder.feedtemplate = """<rss version="2.0">
 </rss>"""
 folder.feeditemtemplate = """
 <item>
-    ...
+  ...
 </item>
 """
+folder.dotags = True
+folder.tagdir = "build/tags/"
+folder.tagtemplate = "<a href = '/tags/{name}' class = 'tag tag_{name}'>{name}</a>"
 folders = {"folder":folder}
 ```
 This config file defines a basic folder. What spiider does is takes the folders defined in the dictionary named 'folders' and converts them into index pages, articles, and feeds. Although this config only defines one, it is entirely possible to use more. Anyway, you probably don't want to keep refering to your folder as 
@@ -59,6 +62,9 @@ folders = {"blog":folder}
 , but for the sake of consistency and readability, you might as well update the entire file to use a variable called 'blog' instead of 'folder'. 
 ```python
 from spiider import Folder
+
+datetimeformat = "%Y-%m-%d"
+fulldateformat = "%a, %d %b %Y"
 blog = Folder()
 blog.srcdir = "src/articles/"
 blog.indexdir = "build/"
@@ -66,18 +72,16 @@ blog.builddir = "build/articles/"
 blog.articletemplate = """
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-    ...
- </html>
+  ...
 """
 blog.indextemplate = """
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  ...
+ ...
 </html>
 """
 blog.previewtemplate = """
 <div>
-   ...
+  ...
 </div>
 """
 blog.dofeed = True
@@ -86,10 +90,13 @@ blog.feedtemplate = """<rss version="2.0">
 </rss>"""
 blog.feeditemtemplate = """
 <item>
-    ...
+  ...
 </item>
 """
-folders = {"folder":blog}
+blog.dotags = True
+blog.tagdir = "build/tags/"
+blog.tagtemplate = "<a href = '/tags/{name}' class = 'tag tag_{name}'>{name}</a>"
+folders = {"folder":folder}
 ```
 For more advanced configuration, such as changing the source and build directories or the templates, you can check out the [configuration section](##configuration"), but we'll leave it here for now.
 
@@ -171,7 +178,9 @@ The  `Folder` objects mentioned above have the following properties:
 | `dofeed` | Whether or not to generate a feed (RSS, atom, etc.). True or False |
 | `feedtemplate` | Feed template, use {items} to put in the feed items|
 | `feeditemtemplate` | Template for feed items. You can use {title}, {path} {description}, {date}, and {fulldate} for the title, path, description, date in your own format, and date in the format format. (use this for pubDate) |
-
+| `dotags` | Whether or not to use tags. True or False |
+| `tagtemplate` | The template html for a tag. Use {name} to get the name. |
+| `feedtagtemplate` | The template html for tags in a feed. Use {name} to get the name. |
 
 
 ## Writing
@@ -183,6 +192,7 @@ description: {insert description}
 date: "{insert date}" (remember to put quotes around it to garuntee it is interpreted as a string, rather than a datetime.date)
 path: {insert path}
 testing: {insert testing (bool)}
+tags: ["{insert tag here}", "{insert tag here}"]
 ---
 ```
 See the table below for what each point of data means
@@ -191,8 +201,9 @@ See the table below for what each point of data means
 | `title` | The title of the article |
 | `description` | A short description of the article |
 | `date` | The date the article was written |
-| `path` | The name of the folder that you created for the article
-| `testing` | True or false: if false the article will be ignored by the builder|
+| `path` | The name of the folder that you created for the article |
+| `testing` | True or false: if false the article will be ignored by the builder |
+| `tags` | The tags of the article. There can be any number of tags inside the list. |
 
 Edit this metadata in your article to change how it will be displayed.
 To add text to your article, simply write markdown in the resto of the file
